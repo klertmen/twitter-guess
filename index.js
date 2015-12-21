@@ -46,7 +46,7 @@ app.get('/game', function(request, response) {
 			  console.log(error); 
 			} else { 
 			  var urls = _.map(data, 'user.profile_image_url');
-			  response.send(urls);
+			  response.render('pages/twitter.ejs', { profileurl: urls[0] });
 			  //var tweets = _.pluck(data, 'text'); 
 			  //response.send(tweets);
 			}
