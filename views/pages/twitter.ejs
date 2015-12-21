@@ -40,7 +40,10 @@
 	  e.preventDefault();
 	  $.ajax({ type: "GET",
 		   url: "/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + $(this).attr("id")
-		 });
+		 })
+	   .done(function(resp) {
+	      $(this).text(resp);
+	   });
 	}); 
        });
     </script>
