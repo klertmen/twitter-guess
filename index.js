@@ -69,7 +69,7 @@ app.get('/game', function(request, response) {
 app.get('/checkAnswer', function(request, response) {
    var tweetId = request.query.tweetid;
    var choice = request.query.userid;
-   redisClient.get(tweetid, function(err, reply) {
+   redisClient.get(tweetId, function(err, reply) {
       var tweetAuthor = reply.toString();
       if (choice === tweetAuthor) {
         alert("Correct!");
