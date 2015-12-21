@@ -45,7 +45,7 @@ app.get('/game', function(request, response) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
-			  var urls = _.map(data, 'user.profile_image_url');
+			  var urls = _.map(data, 'user.id');
 			  response.send(urls);
 			  //var tweets = _.pluck(data, 'text'); 
 			  //response.send(tweets);
