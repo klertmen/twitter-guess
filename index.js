@@ -47,10 +47,10 @@ app.get('/game', function(request, response) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
-			  var tweets = _.pluck(data, 'text'); 
-			  var urls = _.map(data, 'user.profile_image_url');
-			  var usernames = _.map(data, 'user.name');
-			  response.render('pages/twitter', { profileurls: urls, tweet: _.sample(tweets), usernames: usernames});
+			  // TODO: save tweetId/author in Redis, on button click, check against Redis if correct
+			  var randomTweet = _.sample(data);
+			  var users = _.map(data, 'user');
+			  response.render('pages/twitter', { users: users, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
 	  }
