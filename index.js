@@ -1,5 +1,5 @@
-var cool = require('cool-ascii-faces');
 var express = require('express');
+var _ = require('underscore');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var app = express();
@@ -40,11 +40,10 @@ app.get('/authorized', function(request, response) {
 		twitter.getTimeline('home', {}, accessToken, accessTokenSecret,
 		    function(error, data, response) {
 	  		if(error) { console.log(error); }
-	  		else { console.log(data); }
+	  		else { tweets = _.pluck(data, 'text'); console.log(tweets); }
   		});
 	  }
   });
-  response.send('token: ' + request.query.oauth_token + ' verifier:' + request.query.oauth_verifier); 
 });
 
 app.get('/twitter', function(request, response) {
@@ -59,12 +58,6 @@ app.get('/twitter', function(request, response) {
   });
 });
 
-app.get('/cool', function(request, response) {
-  response.send(cool());
-});
-
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
-
