@@ -7,7 +7,7 @@ var twitterAPI = require('node-twitter-api');
 var twitter = new twitterAPI({
 	consumerKey: process.env.CONSUMER_KEY,
 	consumerSecret: process.env.CONSUMER_SECRET,
-	callback: 'https://twitter-guess.herokuapp.com/authorized'
+	callback: 'https://twitter-guess.herokuapp.com/game'
   });
 
 app.set('port', (process.env.PORT || 5000));
@@ -23,11 +23,15 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+app.get('/bootstrap', function(request, response) {
+  response.render('pages/bootstrap');
+});
+
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/authorized', function(request, response) {
+app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
@@ -36,11 +40,16 @@ app.get('/authorized', function(request, response) {
 	  if (error) {
 		console.log(error);
 	  } else {
-		//store accessToken and accessTokenSecret somewhere (associated to the user) 
 		twitter.getTimeline('home', {}, accessToken, accessTokenSecret,
 		    function(error, data, response) {
-	  		if(error) { console.log(error); }
-	  		else { tweets = _.pluck(data, 'text'); console.log(tweets); }
+	  		if (error) { 
+			  console.log(error); 
+			} else { 
+			  var urls = _.map(data, 'user.profile_image_url');
+			  response.send(urls);
+			  //var tweets = _.pluck(data, 'text'); 
+			  //response.send(tweets);
+			}
   		});
 	  }
   });
