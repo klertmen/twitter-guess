@@ -23,16 +23,12 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/bootstrap', function(request, response) {
-  response.render('pages/bootstrap');
-});
-
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
 app.get('/testEJS', function(request, response) {
-  response.render('pages/twitter', { profileurl: 'https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png',
+  response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', ''],
 				     tweet: 'This is a tweet',
 				     usernames: ['Bob', 'Mike', 'Sam'] });
 });
@@ -54,7 +50,7 @@ app.get('/game', function(request, response) {
 			  var tweets = _.pluck(data, 'text'); 
 			  var urls = _.map(data, 'user.profile_image_url');
 			  var usernames = _.map(data, 'user.name');
-			  response.render('pages/twitter', { profileurls: urls, tweet: tweets[0], usernames: usernames});
+			  response.render('pages/twitter', { profileurls: urls, tweet: _.sample(tweets), usernames: usernames});
 			}
   		});
 	  }

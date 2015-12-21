@@ -12,11 +12,13 @@
     <script type="text/javascript" src="ejs.js"></script>
   </head>
   <body>
-    <h1><%= tweet %></h1>
+    <div class="jumbotron text-center">
+    	<h1><%= tweet %></h1>
+    </div>
     <div class="btn-group-vertical" role="group">
 	<% for(var i = 0; i < usernames.length; i++) {%>
-	<button type="button" class="btn btn-default">
-	 <img src="<%= encodeURI(profileurls[i]) %>"><%= usernames[i] %>
+	<button type="button" class="btn btn-info btn-lg">
+	 <img src="<%= encodeURI(profileurls[i]) %>">&nbsp;<%= usernames[i] %>
 	</button>
 	<% } %>
     </div>
