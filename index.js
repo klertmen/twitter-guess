@@ -28,9 +28,9 @@ app.get('/', function(request, response) {
 });
 
 app.get('/testEJS', function(request, response) {
-  response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', ''],
+  response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', '', '', '', ''],
 				     tweet: 'This is a tweet',
-				     usernames: ['Bob', 'Mike', 'Sam'] });
+				     usernames: ['Bob', 'Mike', 'Sam', 'Tom', 'Hank', 'Steve'] });
 });
 
 app.get('/game', function(request, response) {
@@ -42,7 +42,7 @@ app.get('/game', function(request, response) {
 	  if (error) {
 		console.log(error);
 	  } else {
-		twitter.getTimeline('home', {}, accessToken, accessTokenSecret,
+		twitter.getTimeline('home', { count : 6 }, accessToken, accessTokenSecret,
 		    function(error, data, twitterResp) {
 	  		if (error) { 
 			  console.log(error); 

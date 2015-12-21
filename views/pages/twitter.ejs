@@ -16,9 +16,16 @@
     	<h1><%= tweet %></h1>
     </div>
     <div class="btn-group-vertical" role="group">
-	<% for(var i = 0; i < usernames.length; i++) {%>
+	<% for(var i = 0; i < 3; i++) {%>
 	<button type="button" class="btn btn-info btn-lg">
-	 <img src="<%= encodeURI(profileurls[i]) %>">&nbsp;<%= usernames[i] %>
+	 <img style="float:left" src="<%= encodeURI(profileurls[i]) %>">&nbsp;<%= usernames[i] %>
+	</button>
+	<% } %>
+    </div>
+    <div class="btn-group-vertical" role="group">
+	<% for(var i = 3; i < usernames.length; i++) {%>
+	<button type="button" class="btn btn-info btn-lg">
+	 <img style="float:left" src="<%= encodeURI(profileurls[i]) %>">&nbsp;<%= usernames[i] %>
 	</button>
 	<% } %>
     </div>
