@@ -3,7 +3,12 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var app = express();
-var twitterAPI = require('node-twitter-api')
+var twitterAPI = require('node-twitter-api');
+var twitter = new twitterAPI({
+	consumerKey: 'xaOgQc0Im1PooxmkCJPuoQ',
+	consumerSecret: '8R3AzD6IaiJ1UUfPLihtV80T0nJ8vMh1CPDIxDCSU',
+	callback: 'https://twitter-guess.herokuapp.com/authorized'
+  });
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -42,11 +47,6 @@ app.get('/authorized', function(request, response) {
 });
 
 app.get('/twitter', function(request, response) {
-  var twitter = new twitterAPI({
-	consumerKey: 'xaOgQc0Im1PooxmkCJPuoQ',
-	consumerSecret: '8R3AzD6IaiJ1UUfPLihtV80T0nJ8vMh1CPDIxDCSU',
-	callback: 'https://twitter-guess.herokuapp.com/authorized'
-  });
   twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
 	if (error) {
 		console.log(error);
