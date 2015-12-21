@@ -41,12 +41,12 @@ app.get('/game', function(request, response) {
 		console.log(error);
 	  } else {
 		twitter.getTimeline('home', {}, accessToken, accessTokenSecret,
-		    function(error, data, response) {
+		    function(error, data, twitterResp) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
 			  var urls = _.map(data, 'user.profile_image_url');
-			  response.send(urls);
+			  response.send(data);
 			  //var tweets = _.pluck(data, 'text'); 
 			  //response.send(tweets);
 			}
