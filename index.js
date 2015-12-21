@@ -1,12 +1,16 @@
 var cool = require('cool-ascii-faces');
 var express = require('express');
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var app = express();
 var twitterAPI = require('node-twitter-api')
 
 app.set('port', (process.env.PORT || 5000));
 
-app.use(express.cookieParser());
-app.use(express.session({secret: '918209381230lajksdf'}));
+app.use(cookieParser());
+app.use(session({secret: '918209381230lajksdf',
+		 saveUninitialized: true,
+		 resave: true}));
 
 app.use(express.static(__dirname + '/public'));
 
