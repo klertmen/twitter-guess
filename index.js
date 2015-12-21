@@ -5,8 +5,8 @@ var session = require('express-session');
 var app = express();
 var twitterAPI = require('node-twitter-api');
 var twitter = new twitterAPI({
-	consumerKey: 'xaOgQc0Im1PooxmkCJPuoQ',
-	consumerSecret: '8R3AzD6IaiJ1UUfPLihtV80T0nJ8vMh1CPDIxDCSU',
+	consumerKey: process.env.CONSUMER_KEY,
+	consumerSecret: process.env.CONSUMER_SECRET,
 	callback: 'https://twitter-guess.herokuapp.com/authorized'
   });
 
