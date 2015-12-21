@@ -17,7 +17,7 @@
     </div>
     <div class="btn-group-vertical" role="group">
 	<% for(var i = 0; i < 3; i++) {%>
-	<button type="button" class="btn btn-info btn-lg" id="<%= users[i].id %>">
+	<button class="btn btn-info btn-lg" id="<%= users[i].id %>">
 	 <img style="float:left" src="<%= encodeURI(users[i].profile_image_url_https) %>">&nbsp;<%= users[i].name %>
 	</button>
 	<% } %>
@@ -34,5 +34,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function(){
+	$("button").click(function(e) {
+	  e.preventDefault();
+	  $.ajax({ type: "GET",
+		   url: "/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + $(this).attr("id")
+		 });
+	}); 
+       });
+    </script>
   </body>
 </html>

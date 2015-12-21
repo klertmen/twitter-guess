@@ -3,6 +3,7 @@ var _ = require('lodash');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var app = express();
+var redisClient = require('redis').createClient(process.env.REDIS_URL);
 var twitterAPI = require('node-twitter-api');
 var twitter = new twitterAPI({
 	consumerKey: process.env.CONSUMER_KEY,
@@ -30,7 +31,14 @@ app.get('/', function(request, response) {
 app.get('/testEJS', function(request, response) {
   response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', '', '', '', ''],
 				     tweet: 'This is a tweet',
-				     usernames: ['Bob', 'Mike', 'Sam', 'Tom', 'Hank', 'Steve'] });
+				     tweetId: 123456,
+				     users: [{name: 'Bob', id: 12345, profile_image_url_https: 'https://www.google.com'},
+				     	     {name: 'Steve', id: 2222, profile_image_url_https: 'https://www.google.com'},
+				     	     {name: 'Nick', id: 4444, profile_image_url_https: 'https://www.google.com'},
+				     	     {name: 'Brad', id: 5555, profile_image_url_https: 'https://www.google.com'},
+				     	     {name: 'Tom', id: 77777, profile_image_url_https: 'https://www.google.com'},
+				     	     {name: 'Ken', id: 88888, profile_image_url_https: 'https://www.google.com'}]
+				   });
 });
 
 app.get('/game', function(request, response) {
@@ -50,11 +58,25 @@ app.get('/game', function(request, response) {
 			  // TODO: save tweetId/author in Redis, on button click, check against Redis if correct
 			  var randomTweet = _.sample(data);
 			  var users = _.map(data, 'user');
+			  redisClient.set(randomTweet.id, randomTweet.user.id);
 			  response.render('pages/twitter', { users: users, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
 	  }
   });
+});
+
+app.get('/checkAnswer', function(request, response) {
+   var tweetId = request.query.tweetid;
+   var choice = request.query.userid;
+   redisClient.get(tweetid, function(err, reply) {
+      var tweetAuthor = reply.toString();
+      if (choice === tweetAuthor) {
+        alert("Correct!");
+      } else {
+        alert("Incorrect! " + choice + " " + tweetAuthor);
+      }
+   });
 });
 
 app.get('/twitter', function(request, response) {
