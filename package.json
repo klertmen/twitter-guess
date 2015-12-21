@@ -13,6 +13,7 @@
     "ejs": "2.3.3",
     "express": "^4.13.3",
     "express-session": "^1.12.1",
+    "lodash": "^3.10.1",
     "node-twitter-api": "^1.6.2",
     "oauth": "0.9.14",
     "underscore": "^1.8.3"
