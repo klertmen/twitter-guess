@@ -30,6 +30,7 @@ app.get('/', function(request, response) {
 app.get('/authorized', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
+  var oauth_verifier = request.query.oauth_verifier;
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
 	  if (error) {
