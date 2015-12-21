@@ -72,9 +72,9 @@ app.get('/checkAnswer', function(request, response) {
    redisClient.get(tweetId, function(err, reply) {
       var tweetAuthor = reply.toString();
       if (choice === tweetAuthor) {
-        alert("Correct!");
+        console.log("Correct!");
       } else {
-        alert("Incorrect! " + choice + " " + tweetAuthor);
+        console.log("Incorrect! " + choice + " " + tweetAuthor);
       }
    });
 });
