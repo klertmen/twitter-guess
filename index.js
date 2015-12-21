@@ -23,7 +23,21 @@ app.get('/', function(request, response) {
 });
 
 app.get('/authorized', function(request, response) {
-  console.log(request.session.tokenSecret);
+  var requestToken = request.session.token;
+  var requestTokenSecret = request.session.tokenSecret;
+  twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
+	function(error, accessToken, accessTokenSecret, results) {
+	  if (error) {
+		console.log(error);
+	  } else {
+		//store accessToken and accessTokenSecret somewhere (associated to the user) 
+		twitter.getTimeline('home', {}, accessToken, accessTokenSecret,
+		    function(error, data, response) {
+	  		if(error) { console.log(error); }
+	  		else { console.log(data); }
+  		});
+	  }
+  });
   response.send('token: ' + request.query.oauth_token + ' verifier:' + request.query.oauth_verifier); 
 });
 
@@ -33,8 +47,6 @@ app.get('/twitter', function(request, response) {
 	consumerSecret: '8R3AzD6IaiJ1UUfPLihtV80T0nJ8vMh1CPDIxDCSU',
 	callback: 'https://twitter-guess.herokuapp.com/authorized'
   });
-  var token = '';
-  var tokenSecret = '';
   twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
 	if (error) {
 		console.log(error);
@@ -42,7 +54,6 @@ app.get('/twitter', function(request, response) {
 		request.session.token = requestToken;
 		request.session.tokenSecret = requestTokenSecret;
 		response.redirect(twitter.getAuthUrl(requestToken));
-		//store token and tokenSecret somewhere, you'll need them later; redirect user 
 	}
   });
 });
