@@ -31,6 +31,12 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
+app.get('/testEJS', function(request, response) {
+  response.render('pages/twitter', { profileurl: 'https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png',
+				     tweet: 'This is a tweet',
+				     usernames: ['Bob', 'Mike', 'Sam'] });
+});
+
 app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
@@ -45,10 +51,10 @@ app.get('/game', function(request, response) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
+			  var tweets = _.pluck(data, 'text'); 
 			  var urls = _.map(data, 'user.profile_image_url');
-			  response.render('pages/twitter.ejs', { profileurl: urls[0] });
-			  //var tweets = _.pluck(data, 'text'); 
-			  //response.send(tweets);
+			  var usernames = _.map(data, 'user.name');
+			  response.render('pages/twitter', { profileurls: urls, tweet: tweets[0], usernames: usernames});
 			}
   		});
 	  }
