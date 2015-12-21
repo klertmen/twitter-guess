@@ -5,6 +5,9 @@ var twitterAPI = require('node-twitter-api')
 
 app.set('port', (process.env.PORT || 5000));
 
+app.use(express.cookieParser());
+app.use(express.session({secret: '918209381230lajksdf'}));
+
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
@@ -16,6 +19,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/authorized', function(request, response) {
+  console.log(request.session.tokenSecret);
   response.send('token: ' + request.query.oauth_token + ' verifier:' + request.query.oauth_verifier); 
 });
 
@@ -31,14 +35,12 @@ app.get('/twitter', function(request, response) {
 	if (error) {
 		console.log(error);
 	} else {
-		console.log(requestToken);
-		token = requestToken;
-		tokenSecret = requestTokenSecret;
+		request.session.token = requestToken;
+		request.session.tokenSecret = requestTokenSecret;
 		response.redirect(twitter.getAuthUrl(requestToken));
 		//store token and tokenSecret somewhere, you'll need them later; redirect user 
 	}
   });
-  //response.send(cool());
 });
 
 app.get('/cool', function(request, response) {
