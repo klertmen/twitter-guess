@@ -38,11 +38,10 @@
       $(document).ready(function(){
 	$("button").click(function(e) {
 	  e.preventDefault();
-	  $.ajax({ type: "GET",
-		   url: "/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + $(this).attr("id")
-		 })
+	  var buttonId = $(this).attr("id");
+	  $.get("/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + buttonId)
 	   .done(function(resp) {
-	      $(this).text(resp);
+	     $("#" + buttonId).text(resp);
 	   });
 	}); 
        });

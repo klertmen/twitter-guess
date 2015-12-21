@@ -70,11 +70,15 @@ app.get('/checkAnswer', function(request, response) {
    var tweetId = request.query.tweetid;
    var choice = request.query.userid;
    redisClient.get(tweetId, function(err, reply) {
-      var tweetAuthor = reply.toString();
-      if (choice === tweetAuthor) {
-        response.send("CORRECT");
+      if (reply) {
+        var tweetAuthor = reply.toString();
+        if (choice === tweetAuthor) {
+          response.send("CORRECT");
+        } else {
+          response.send("INCORRECT");
+        }
       } else {
-        response.send("INCORRECT");
+        response.send("Tweet not found");
       }
    });
 });
