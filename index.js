@@ -28,6 +28,20 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
+function populateRedisWithTweets(requestToken, tweets) {
+  var tweetsArr = [requestToken+'tweets'];
+  tweetsArr.push(tweets);
+  redisClient.rpush(tweetsArr);
+}
+
+function renderPage(data, users) {
+  response.render('pages/twitter', { users: users, tweet: data.text, tweetId: data.id });
+}
+
+function getTweetFromRedis(requestToken, callbackFn) {
+  redisClient.lrange(requestToken, 0, -1, callbackFn(arguments[2]));
+}
+
 app.get('/testEJS', function(request, response) {
   redisClient.set(123456, 5555);
   response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', '', '', '', ''],
@@ -46,21 +60,25 @@ app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
+  if (!oauth_verifier) {
+    getTweetFromRedis(requestToken, renderPage, request.session.users);
+  }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
 	  if (error) {
 		console.log(requestToken);
 		console.log(error);
 	  } else {
-		twitter.getTimeline('home', { count : 6 }, accessToken, accessTokenSecret,
+		twitter.getTimeline('home', { count : 200 }, accessToken, accessTokenSecret,
 		    function(error, data, twitterResp) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
-			  // TODO: save tweetId/author in Redis, on button click, check against Redis if correct
 			  var randomTweet = _.sample(data);
-			  var users = _.map(data, 'user');
+			  var users = _.uniq(_.map(data, 'user'));
+			  request.session.users = users;
 			  redisClient.set(randomTweet.id, randomTweet.user.id);
+			  populateRedisWithTweets(requestToken, data);
 			  response.render('pages/twitter', { users: users, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
