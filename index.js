@@ -57,15 +57,15 @@ app.get('/testEJS', function(request, response) {
 });
 
 function getSubsetUsers(userId, users) {
-	var subsetUsers = new Set(_.sample(users, 5));
+	var subsetUsers = _.sample(users, 5);
 	if (!_.find(subsetUsers, 'id', userId)) {
-		subsetUsers.add(_.find(users, 'id', userId));
+		subsetUsers.push(_.find(users, 'id', userId));
 	} else {
 		while (subsetUsers.length != 6) {
-			subsetUsers.add(_.sample(users, 1));
+			subsetUsers.push(_.sample(users, 1));
 		}
 	}
-	console.log(subsetUsers.size);
+	console.log(subsetUsers.length);
 	subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
 }
