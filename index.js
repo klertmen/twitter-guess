@@ -35,6 +35,8 @@ function populateRedisWithTweets(requestToken, tweets) {
 }
 
 function renderPage(data, users, response) {
+  console.log(users);
+  console.log(response);
   response.render('pages/twitter', { users: users, tweet: data.text, tweetId: data.id });
 }
 
@@ -65,7 +67,6 @@ function getSubsetUsers(userId, users) {
 			subsetUsers.push(_.sample(users, 1));
 		}
 	}
-	console.log(subsetUsers.length);
 	subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
 }
