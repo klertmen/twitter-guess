@@ -34,12 +34,12 @@ function populateRedisWithTweets(requestToken, tweets) {
   redisClient.rpush(tweetsArr);
 }
 
-function renderPage(data, users) {
+function renderPage(data, users, response) {
   response.render('pages/twitter', { users: users, tweet: data.text, tweetId: data.id });
 }
 
-function getTweetFromRedis(requestToken, callbackFn) {
-  redisClient.lrange(requestToken, 0, -1, callbackFn(arguments[2]));
+function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
+  redisClient.lrange(requestToken, 0, -1, callbackFn(usersList, response));
 }
 
 app.get('/testEJS', function(request, response) {
@@ -61,7 +61,7 @@ app.get('/game', function(request, response) {
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
   if (!oauth_verifier) {
-    getTweetFromRedis(requestToken, renderPage, request.session.users);
+    getTweetFromRedis(requestToken, renderPage, request.session.users, response);
   }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
@@ -75,7 +75,7 @@ app.get('/game', function(request, response) {
 			  console.log(error); 
 			} else { 
 			  var randomTweet = _.sample(data);
-			  var users = _.uniq(_.map(data, 'user'));
+			  var users = _.uniq(_.map(data, 'user'), "id");
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id, randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, data);
