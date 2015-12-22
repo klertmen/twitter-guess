@@ -61,8 +61,6 @@ app.get('/game', function(request, response) {
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
   if (!oauth_verifier) {
-    console.log(request.session.users);
-    console.log(response);
     getTweetFromRedis(requestToken, renderPage, request.session.users, response);
   }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
@@ -80,7 +78,9 @@ app.get('/game', function(request, response) {
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id, randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, data);
-			  response.render('pages/twitter', { users: users, tweet: randomTweet.text, tweetId: randomTweet.id });
+			  var subsetUsers = [_.find(users, 'id', randomTweet.user.id)];
+			  subsetUsers.push(_.slice(users, end=10));
+			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
 	  }
