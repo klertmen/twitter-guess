@@ -36,11 +36,13 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(users, response) {
   return function(data) {
+    console.log(data);
     return response.render('pages/twitter', { users: users, tweet: data.text, tweetId: data.id });
   }
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
+  console.log(requestToken);
   redisClient.lrange(requestToken+'tweets', 0, -1, callbackFn(usersList, response));
 }
 
