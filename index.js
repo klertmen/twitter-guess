@@ -61,12 +61,13 @@ app.get('/game', function(request, response) {
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
   if (!oauth_verifier) {
+    console.log(request.session.users);
+    console.log(response);
     getTweetFromRedis(requestToken, renderPage, request.session.users, response);
   }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
 	  if (error) {
-		console.log(requestToken);
 		console.log(error);
 	  } else {
 		twitter.getTimeline('home', { count : 200 }, accessToken, accessTokenSecret,

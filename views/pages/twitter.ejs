@@ -45,7 +45,6 @@
 		   if (resp.answer && resp.answer === 'correct') {
 	     	     $("#" + buttonId).addClass("btn-success");
 		   } else if (resp.answer && resp.answer === 'incorrect') {
-		     console.log(resp);
 	     	     $("#" + buttonId).addClass("btn-danger");
 	     	     $("#" + resp.userid).addClass("btn-success");
 		   }
