@@ -49,6 +49,7 @@ app.get('/game', function(request, response) {
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
 	  if (error) {
+		console.log(requestToken);
 		console.log(error);
 	  } else {
 		twitter.getTimeline('home', { count : 6 }, accessToken, accessTokenSecret,
