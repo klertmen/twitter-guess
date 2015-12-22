@@ -37,12 +37,12 @@ function populateRedisWithTweets(requestToken, tweets) {
 function renderPage(users, response) {
   return function(err, data) {
     console.log(data);
-    return response.render('pages/twitter', { users: users, tweet: data.text, tweetId: data.id });
+    return response.render('pages/twitter', { users: users, tweet: data[0].text, tweetId: data[0].id });
   }
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
-  redisClient.lrange(requestToken+'tweets', 1, 2, callbackFn(usersList, response));
+  redisClient.lrange(requestToken+'tweets', 1, 1, callbackFn(usersList, response));
 }
 
 app.get('/testEJS', function(request, response) {

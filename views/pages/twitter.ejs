@@ -48,7 +48,8 @@
 	     	     $("#" + buttonId).addClass("btn-danger");
 	     	     $("#" + resp.userid).addClass("btn-success");
 		   }
-		   setTimeout(function() { $.get("/game").done(function(resp) { alert("klas;dasfd"); }) }, 2000); 
+		   //setTimeout(function() { $.get("/game"); }, 2000); 
+		   setTimeout(function() { window.location.href = '/game'; }, 2000); 
 	        });
 	}); 
        });
