@@ -29,6 +29,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/testEJS', function(request, response) {
+  redisClient.set(123456, 5555);
   response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', '', '', '', ''],
 				     tweet: 'This is a tweet',
 				     tweetId: 123456,
@@ -73,12 +74,12 @@ app.get('/checkAnswer', function(request, response) {
       if (reply) {
         var tweetAuthor = reply.toString();
         if (choice === tweetAuthor) {
-          response.send("CORRECT");
+          response.json({ answer: "correct"});
         } else {
-          response.send("INCORRECT");
+          response.json({ answer: "incorrect", userid: tweetAuthor });
         }
       } else {
-        response.send("Tweet not found");
+        response.send({ answer: "not found" });
       }
    });
 });
