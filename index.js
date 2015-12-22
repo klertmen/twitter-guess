@@ -31,7 +31,7 @@ app.get('/', function(request, response) {
 function populateRedisWithTweets(requestToken, tweets) {
   var tweetsArr = [requestToken+'tweets'];
   tweetsArr.push(tweets);
-  redisClient.rpush(tweetsArr);
+  redisClient.rpush(_.flatten(tweetsArr));
 }
 
 function renderPage(users, response) {
@@ -41,7 +41,7 @@ function renderPage(users, response) {
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
-  redisClient.lrange(requestToken, 0, -1, callbackFn(usersList, response));
+  redisClient.lrange(requestToken+'tweets', 0, -1, callbackFn(usersList, response));
 }
 
 app.get('/testEJS', function(request, response) {
