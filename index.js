@@ -65,8 +65,9 @@ function getSubsetUsers(userId, users) {
 			subsetUsers.add(_.sample(users, 1));
 		}
 	}
-	console.log(subsetUsers.length);
+	console.log(subsetUsers.size);
 	subsetUsers = _.shuffle(subsetUsers);
+	return subsetUsers;
 }
 
 app.get('/game', function(request, response) {
