@@ -79,9 +79,9 @@ app.get('/game', function(request, response) {
 			  redisClient.set(randomTweet.id, randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, data);
 			  var subsetUsers = [_.find(users, 'id', randomTweet.user.id)];
-			  console.log(subsetUsers);
+			  console.log(subsetUsers.length);
 			  subsetUsers.push(_.slice(users, end=10));
-			  console.log(subsetUsers);
+			  console.log(subsetUsers.length);
 			  response.render('pages/twitter', { users: users, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
