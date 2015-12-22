@@ -56,6 +56,19 @@ app.get('/testEJS', function(request, response) {
 				   });
 });
 
+function getSubsetUsers(userId, users) {
+	var subsetUsers = new Set(_.sample(users, 5));
+	if (!_.find(subsetUsers, 'id', userId)) {
+		subsetUsers.add(_.find(users, 'id', userId));
+	} else {
+		while (subsetUsers.length != 6) {
+			subsetUsers.add(_.sample(users, 1));
+		}
+	}
+	console.log(subsetUsers.length);
+	subsetUsers = _.shuffle(subsetUsers);
+}
+
 app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
@@ -78,15 +91,7 @@ app.get('/game', function(request, response) {
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id, randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, data);
-			  var subsetUsers = new Set(_.sample(users, 5));
-			  if (!_.find(subsetUsers, 'id', randomTweet.user.id)) {
-			    subsetUsers.add(_.find(users, 'id', randomTweet.user.id));
-			  } else {
-			    while (subsetUsers.length != 6) {
-			      subsetUsers.add(_.sample(users, 1));
-			    }
-			  }
-			  subsetUsers = _.shuffle(subsetUsers);
+			  var subsetUsers = getSubsetusers(randomTweet.user.id, users); 
 			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
