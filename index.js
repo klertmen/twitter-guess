@@ -77,6 +77,7 @@ app.get('/game', function(request, response) {
   var oauth_verifier = request.query.oauth_verifier;
   if (!oauth_verifier) {
     getTweetFromRedis(requestToken, renderPage, request.session.users, response);
+    return;
   }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
 	function(error, accessToken, accessTokenSecret, results) {
