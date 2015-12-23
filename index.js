@@ -88,7 +88,7 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
   });
 }
 
-function getTweetsFromTimeline(session, requestToken) {
+function getTweetsFromTimeline(session, requestToken, response) {
   twitter.getTimeline('home', { count : 10 }, session.accessToken, session.accessTokenSecret,
     function(error, data, twitterResp) {
 	    if (error) {
@@ -126,7 +126,7 @@ app.get('/game', function(request, response) {
 	 setTwitterUserName(request, accessToken, accessTokenSecret);
 	 request.session.accessToken = accessToken;
 	 request.session.accessTokenSecret = accessTokenSecret;
-	 getTweetsFromTimeline(request.session, requestToken);
+	 getTweetsFromTimeline(request.session, requestToken, response);
       	}
     });
 });
