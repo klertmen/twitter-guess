@@ -45,7 +45,7 @@ function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
-	console.log(subsetUsers.length);
+	console.log(subsetUsers);
     	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
     });
   }
@@ -102,7 +102,6 @@ app.get('/game', function(request, response) {
 			} else { 
 			  var randomTweet = _.first(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
-			  console.log(users);
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, _.rest(data));
