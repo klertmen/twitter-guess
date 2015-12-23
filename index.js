@@ -46,7 +46,7 @@ function renderPage(users, response) {
     return redisClient.hgetall(data, function(err, tweet) {
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
 	console.log(subsetUsers);
-    	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
+    	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: tweet.userId });
     });
   }
 }
