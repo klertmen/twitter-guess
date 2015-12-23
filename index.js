@@ -50,8 +50,6 @@ function renderPage(users, response) {
     return redisClient.hgetall(data, function(err, tweet) {
    	redisClient.set(data+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
-	console.log("right answer: " + tweet.userId);
-	console.log(_.map(subsetUsers, 'id'));
     	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: data });
     });
   }
@@ -78,18 +76,19 @@ app.get('/testEJS', function(request, response) {
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
 	userId = Number(userId);
+ 	// add right user to list if it's not part of sample
 	if (!_.find(subsetUsers, 'id', userId)) {
-	  var user = _.find(users, 'id', userId);
-	  subsetUsers.push(user);
+	  subsetUsers.push(_.find(users, 'id', userId));
 	} else {
+	  // if right user is in sample, add unique users 
 	  while (subsetUsers.length != 6) {
-	   var newUser = _.sample(users);
-	   console.log(newUser.id);
-	   subsetUsers.push(newUser);
+	    var newUser = _.sample(users);
+	    if (!_.find(subsetUsers, 'id', newUser.id)) {
+	      subsetUsers.push(newUser);
+	    }
 	  }
 	}
-	console.log("*" + _.map(subsetUsers, 'id'));
-	//subsetUsers = _.shuffle(subsetUsers);
+	subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
 }
 
