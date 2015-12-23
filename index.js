@@ -75,7 +75,7 @@ function getSubsetUsers(userId, users) {
 	return subsetUsers;
 }
 
-function setTwitterUserName(request) {
+function setTwitterUserName(request, accessToken, accessTokenSecret) {
   twitter.verifyCredentials(accessToken, accessTokenSecret, function(error, data, response) {
     if (error) {
        console.log(error);
