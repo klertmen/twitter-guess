@@ -45,25 +45,6 @@ function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
-	console.log("tweet userid: " + tweet.userId);
-	console.log("== user list ==");
-	_.forEach(users, function(user) { 
-	  if(user) {
-	    console.log(user.id);
-	  }
-	  else {
-	    console.log("no user");
-	  }
-	});
-	console.log("== subuser list ==");
-	_.forEach(subsetUsers, function(user) { 
-	  if(user) {
-	    console.log(user.id);
-	  }
-	  else {
-	    console.log("no user");
-	  }
-	});
     	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: tweet.userId });
     });
   }
@@ -93,7 +74,7 @@ function getSubsetUsers(userId, users) {
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
 		subsetUsers.push(_.find(users, 'id', userId));
-		console.log("added this userid: " + _.map(subsetUsers, 'id'));
+		console.log("added this userid:[" +  userId + "]" + _.map(subsetUsers, 'id'));
 	} else {
 		console.log("*" + _.map(subsetUsers, 'id'));
 		while (subsetUsers.length != 6) {
