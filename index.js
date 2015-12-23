@@ -47,7 +47,7 @@ function renderPage(users, response) {
 	console.log(obj);
     	var tweet = { text: 'New tweet', userId: '123456' }
     	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
-    }
+    });
   }
 }
 
