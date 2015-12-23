@@ -46,7 +46,7 @@ function renderPage(session, response) {
     return redisClient.hgetall(tweetId, function(err, tweet) {
    	redisClient.set(tweetId+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, session.users);
-	var percentCorrect = ((session.numberCorrect / (session.questionCount - 1)) * 100).toFixed(2);
+	var percentCorrect = ((session.numberCorrect / (session.questionCount - 1)) * 100).toFixed();
     	return response.render('pages/twitter', { currentQuestionNumber: session.questionCount, users: subsetUsers, tweet: tweet.text, tweetId: tweetId, percentCorrect: percentCorrect });
     });
   }
