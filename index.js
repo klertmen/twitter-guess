@@ -44,12 +44,12 @@ function populateRedisWithTweets(requestToken, tweets) {
 function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
-    	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
+    	return response.render('pages/twitter', { users: getSubsetUsers(tweetId, users), tweet: tweet.text, tweetId: tweet.userId });
     });
   }
 }
 
-function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
+function getNextTweetFromRedis(requestToken, callbackFn, usersList, response) {
   redisClient.lpop(requestToken+'tweets', callbackFn(usersList, response));
 }
 
@@ -85,7 +85,7 @@ app.get('/game', function(request, response) {
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
   if (!oauth_verifier) {
-    getTweetFromRedis(requestToken, renderPage, request.session.users, response);
+    getNextTweetFromRedis(requestToken, renderPage, request.session.users, response);
     return;
   }
   twitter.getAccessToken(requestToken, requestTokenSecret, oauth_verifier, 
