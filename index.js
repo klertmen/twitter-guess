@@ -122,7 +122,7 @@ app.get('/game', function(request, response) {
 			  var randomTweet = _.first(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
 			  console.log("== Users ==");
-			  console.log(users);
+			  console.log(_.map(users, 'id'));
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, _.rest(data));
