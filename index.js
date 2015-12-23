@@ -89,15 +89,12 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
-	_.forEach(subsetUsers, function(user) { if(user) console.log("*" + user.id); else console.log("no user"); });
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
-		console.log(user);
 		subsetUsers.push(_.find(users, 'id', userId));
 	} else {
 		while (subsetUsers.length != 6) {
 			subsetUsers.push(_.sample(users, 1));
-			console.log("added one more");
 		}
 	}
 	subsetUsers = _.shuffle(subsetUsers);
@@ -124,6 +121,8 @@ app.get('/game', function(request, response) {
 			} else { 
 			  var randomTweet = _.first(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
+			  console.log("== Users ==");
+			  console.log(users);
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, _.rest(data));
