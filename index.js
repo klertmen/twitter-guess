@@ -93,9 +93,11 @@ function getSubsetUsers(userId, users) {
 		var user = _.find(users, 'id', userId);
 		subsetUsers.push(_.find(users, 'id', userId));
 	} else {
+		console.log("*" + _.map(subsetUsers, 'id'));
 		while (subsetUsers.length != 6) {
 			subsetUsers.push(_.sample(users, 1));
 		}
+		console.log("***" + _.map(subsetUsers, 'id'));
 	}
 	subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
