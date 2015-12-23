@@ -43,6 +43,10 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(users, response) {
   return function(err, data) {
+    // TODO: handle case where no more tweets
+    if(!data) {
+      response.send();
+    }
     return redisClient.hgetall(data, function(err, tweet) {
    	redisClient.set(data+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
@@ -76,14 +80,13 @@ function getSubsetUsers(userId, users) {
 	userId = Number(userId);
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
-		console.log('pushing:' + user.id);
 		subsetUsers.push(user);
 	} else {
 		while (subsetUsers.length != 6) {
 			subsetUsers.push(_.sample(users, 1));
 		}
 	}
-	//subsetUsers = _.shuffle(subsetUsers);
+	subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
 }
 
