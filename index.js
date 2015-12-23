@@ -72,8 +72,7 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
-	console.log(_.isNumber(userId));
-	console.log(_.map(users, function(user) { console.log(_.isNumber(user.id)); }));
+	userId = Number(userId);
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
 		console.log('pushing:' + user);
