@@ -41,7 +41,7 @@ function renderPage(session, response) {
   return function(err, tweetId) {
     // TODO: handle case where no more tweets
     if(!tweetId) {
-      response.send("Thanks for playing, " + request.session.userName + " !");
+      response.send("Thanks for playing, " + session.userName + " !");
     }
     return redisClient.hgetall(tweetId, function(err, tweet) {
    	redisClient.set(tweetId+'answer', tweet.userId);
@@ -88,6 +88,27 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
   });
 }
 
+function getTweetsFromTwitter(session, requestToken) {
+  twitter.getTimeline('home', { count : 10 }, session.accessToken, session.accessTokenSecret,
+    function(error, data, twitterResp) {
+	    if (error) {
+	      console.log(error);
+	    } else {
+	      var randomTweet = _.first(data);
+	      var users = _.uniq(_.map(data, 'user'), "id");
+	      session.users = users;
+	      session.questionCount = 1;
+	      session.numberCorrect = 0;
+	      redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
+	      populateRedisWithTweets(requestToken, _.rest(data));
+	      var subsetUsers = getSubsetUsers(randomTweet.user.id, users);
+	      response.render('pages/twitter',
+		    { currentQuestionNumber: session.questionCount,
+		      users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
+	    }
+    });
+}
+
 app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
@@ -103,24 +124,9 @@ app.get('/game', function(request, response) {
 	 console.log(error);
 	} else {
 	 setTwitterUserName(request, accessToken, accessTokenSecret);
-	 twitter.getTimeline('home', { count : 10 }, accessToken, accessTokenSecret,
-	    function(error, data, twitterResp) {
-	    if (error) {
-	      console.log(error);
-	    } else {
-	      var randomTweet = _.first(data);
-	      var users = _.uniq(_.map(data, 'user'), "id");
-	      request.session.users = users;
-	      request.session.questionCount = 1;
-	      request.session.numberCorrect = 0;
-	      redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
-	      populateRedisWithTweets(requestToken, _.rest(data));
-	      var subsetUsers = getSubsetUsers(randomTweet.user.id, users);
-	      response.render('pages/twitter',
-		    { currentQuestionNumber: request.session.questionCount,
-users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
-	      }
-	    });
+	 request.session.accessToken = accessToken;
+	 request.session.accessTokenSecret = accessTokenSecret;
+	 getTweetsFromTimeline(request.session, requestToken);
       	}
     });
 });
