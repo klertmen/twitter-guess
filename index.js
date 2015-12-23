@@ -44,11 +44,11 @@ function populateRedisWithTweets(requestToken, tweets) {
 function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
-   	redisClient.set(tweet.userId+'answer', tweet.userId);
+   	redisClient.set(data+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
 	console.log("right answer: " + tweet.userId);
 	console.log(_.map(subsetUsers, 'id'));
-    	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: tweet.userId });
+    	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: data });
     });
   }
 }
