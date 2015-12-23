@@ -89,9 +89,11 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
+	console.log("sample: " + _.map(subsetUsers, 'id'));
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
 		subsetUsers.push(_.find(users, 'id', userId));
+		console.log("added this userid: " + _.map(subsetUsers, 'id'));
 	} else {
 		console.log("*" + _.map(subsetUsers, 'id'));
 		while (subsetUsers.length != 6) {
