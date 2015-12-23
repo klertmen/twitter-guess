@@ -24,9 +24,9 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
-});
+//app.get('/', function(request, response) {
+//  response.render('pages/index');
+//});
 
 function populateRedisWithTweets(requestToken, tweets) {
   var tweetsArr = [requestToken+'tweets'];
@@ -49,8 +49,10 @@ function renderPage(users, response) {
     }
     return redisClient.hgetall(data, function(err, tweet) {
    	redisClient.set(data+'answer', tweet.userId);
-	var subsetUsers = getSubsetUsers(tweet.userId, users);
-    	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: data });
+	return redisClient.incr(requestToken+'current', function(err, questionCount) {
+	  var subsetUsers = getSubsetUsers(tweet.userId, users);
+    	  return response.render('pages/twitter', { currentQuestionNumber: questionCount, users: subsetUsers, tweet: tweet.text, tweetId: data });
+	});
     });
   }
 }
@@ -59,28 +61,14 @@ function getNextTweetFromRedis(requestToken, callbackFn, usersList, response) {
   redisClient.lpop(requestToken+'tweets', callbackFn(usersList, response));
 }
 
-app.get('/testEJS', function(request, response) {
-  redisClient.set(123456, 5555);
-  response.render('pages/twitter', { profileurls: ['https://pbs.twimg.com/profile_images/674634141866983424/-9Ob7KPW_bigger.png', '', '', '', '', ''],
-				     tweet: 'This is a tweet',
-				     tweetId: 123456,
-				     users: [{name: 'Bob', id: 12345, profile_image_url_https: 'https://www.google.com'},
-				     	     {name: 'Steve', id: 2222, profile_image_url_https: 'https://www.google.com'},
-				     	     {name: 'Nick', id: 4444, profile_image_url_https: 'https://www.google.com'},
-				     	     {name: 'Brad', id: 5555, profile_image_url_https: 'https://www.google.com'},
-				     	     {name: 'Tom', id: 77777, profile_image_url_https: 'https://www.google.com'},
-				     	     {name: 'Ken', id: 88888, profile_image_url_https: 'https://www.google.com'}]
-				   });
-});
-
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
 	userId = Number(userId);
- 	// add right user to list if it's not part of sample
+ 	// add correct user to list if it's not part of sample
 	if (!_.find(subsetUsers, 'id', userId)) {
 	  subsetUsers.push(_.find(users, 'id', userId));
 	} else {
-	  // if right user is in sample, add unique users 
+	  // if correct user is in sample, add unique users 
 	  while (subsetUsers.length != 6) {
 	    var newUser = _.sample(users);
 	    if (!_.find(subsetUsers, 'id', newUser.id)) {
@@ -114,9 +102,10 @@ app.get('/game', function(request, response) {
 			  var users = _.uniq(_.map(data, 'user'), "id");
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
+			  redisClient.set(requestToken+'current', 1);
 			  populateRedisWithTweets(requestToken, _.rest(data));
 			  var subsetUsers = getSubsetUsers(randomTweet.user.id, users); 
-			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
+			  response.render('pages/twitter', { currentQuestionNumber: 1, users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
 	  }
@@ -140,7 +129,7 @@ app.get('/checkAnswer', function(request, response) {
    });
 });
 
-app.get('/twitter', function(request, response) {
+app.get('/', function(request, response) {
   twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
 	if (error) {
 		console.log(error);
