@@ -14,7 +14,12 @@
   </head>
   <body>
     <div class="jumbotron text-center">
-    	<h2>Tweet <%= currentQuestionNumber %> of 10 (<%= percentCorrect %>% correct) </h2>
+    	<h2>Tweet <%= currentQuestionNumber %> of 10
+	<% if (currentQuestionNumber > 1) {%> 
+	   (<%= percentCorrect %>% correct) </h2>
+	<% } else { %>
+	    </h2>
+	<% } %>
     	<h1 id="<%= tweetId %>"><%= tweet %></h1>
     </div>
     <div class="col-md-6 btn-group-vertical" role="group">
