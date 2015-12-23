@@ -43,9 +43,7 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(users, response) {
   return function(err, data) {
-    return redisClient.hgetall(data, function(err, obj) {
-	console.log(obj);
-    	var tweet = { text: 'New tweet', userId: '123456' }
+    return redisClient.hgetall(data, function(err, tweet) {
     	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
     });
   }
