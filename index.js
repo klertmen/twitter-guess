@@ -41,7 +41,7 @@ function renderPage(session, response) {
   return function(err, tweetId) {
     // TODO: handle case where no more tweets
     if(!tweetId) {
-      response.send();
+      response.send("Thanks for playing, " + request.session.userName + " !");
     }
     return redisClient.hgetall(tweetId, function(err, tweet) {
    	redisClient.set(tweetId+'answer', tweet.userId);
