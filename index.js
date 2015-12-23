@@ -74,6 +74,7 @@ function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
+		console.log('pushing:' + user);
 		subsetUsers.push(_.find(users, 'id', userId));
 	} else {
 		while (subsetUsers.length != 6) {
