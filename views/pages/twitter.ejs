@@ -37,7 +37,7 @@
 	</button>
 	<% } %>
     </div>
-    <h3 class="col-md-12 text-center" id="correct" hidden>Correct!
+    <h3 class="col-md-12 text-center" id="correct" hidden>Great job!
     </h3>
     <h3 class="col-md-12 text-center" id="incorrect" hidden>
     </h3>
@@ -58,7 +58,7 @@
 	     	     $("#correct").show();
 	     	     $("#" + buttonId).addClass("btn-success");
 		   } else if (resp.answer && resp.answer === 'incorrect') {
-	     	     $("#incorrect").text("Sorry, the correct answer is " + $("#"+resp.userid).text());
+	     	     $("#incorrect").text("Nope, " + $("#"+resp.userid).text() + " tweeted this.");
 	     	     $("#incorrect").show();
 	     	     $("#" + buttonId).addClass("btn-danger");
 	     	     $("#" + resp.userid).addClass("btn-success");
