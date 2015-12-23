@@ -96,19 +96,24 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	    } else {
 	      var randomTweet = _.first(data);
 	      var users = _.uniq(_.map(data, 'user'), "id");
+	      var percentCorrect = 0;
 	      session.users = users;
 	      if (!session.questionCount) {
 	        session.questionCount = 1;
 	      }
 	      if (!session.numberCorrect) {
 	      	session.numberCorrect = 0;
+	      } else {
+	      	percentCorrect = ((session.numberCorrect / (session.questionCount - 1)) * 100).toFixed();
 	      }
 	      redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 	      populateRedisWithTweets(requestToken, _.rest(data));
 	      var subsetUsers = getSubsetUsers(randomTweet.user.id, users);
 	      response.render('pages/twitter',
 		    { currentQuestionNumber: session.questionCount,
-		      users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
+		      users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id,
+		      percentCorrect: percentCorrect 
+		    });
 	    }
     });
 }
