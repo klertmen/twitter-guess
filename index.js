@@ -89,6 +89,7 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
+	_.forEach(subsetUsers, function(user) { if(user) console.log("*" + user.id) else console.log("no user") });
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
 		console.log(user);
