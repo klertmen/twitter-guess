@@ -45,7 +45,8 @@ function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
-	console.log(tweet.userId);
+	console.log("tweet userid: " + tweet.userId);
+	console.log("== user list ==");
 	_.forEach(users, function(user) { 
 	  if(user) {
 	    console.log(user.id);
@@ -54,6 +55,7 @@ function renderPage(users, response) {
 	    console.log("no user");
 	  }
 	});
+	console.log("== subuser list ==");
 	_.forEach(subsetUsers, function(user) { 
 	  if(user) {
 	    console.log(user.id);
