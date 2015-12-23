@@ -119,7 +119,7 @@ app.get('/game', function(request, response) {
   	    });
       }
   });
-}
+});
 
 app.get('/checkAnswer', function(request, response) {
    var tweetId = request.query.tweetid;
