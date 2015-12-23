@@ -30,8 +30,9 @@ app.get('/', function(request, response) {
 
 function populateRedisWithTweets(requestToken, tweets) {
   var tweetsArr = [requestToken+'tweets'];
-  tweetsArr.push(tweets);
+  tweetsArr.push(_.map(tweets, "id"));
   redisClient.rpush(_.flatten(tweetsArr));
+  // add hashes for each tweet
 }
 
 function renderPage(users, response) {
