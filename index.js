@@ -48,6 +48,7 @@ function renderPage(users, response) {
     	var tweet = { text: 'New tweet', userId: '123456' }
     	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
     }
+  }
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
