@@ -45,6 +45,7 @@ function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
+	console.log(_.map(subsetUsers, 'id'));
     	return response.render('pages/twitter', { users: subsetUsers, tweet: tweet.text, tweetId: tweet.userId });
     });
   }
@@ -70,19 +71,15 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
-	console.log("sample: " + _.map(subsetUsers, 'id'));
 	if (!_.find(subsetUsers, 'id', userId)) {
 		var user = _.find(users, 'id', userId);
 		subsetUsers.push(_.find(users, 'id', userId));
-		console.log("added this userid:[" +  userId + "]" + _.map(subsetUsers, 'id'));
 	} else {
-		console.log("*" + _.map(subsetUsers, 'id'));
 		while (subsetUsers.length != 6) {
 			subsetUsers.push(_.sample(users, 1));
 		}
-		console.log("***" + _.map(subsetUsers, 'id'));
 	}
-	subsetUsers = _.shuffle(subsetUsers);
+	//subsetUsers = _.shuffle(subsetUsers);
 	return subsetUsers;
 }
 
@@ -106,14 +103,10 @@ app.get('/game', function(request, response) {
 			} else { 
 			  var randomTweet = _.first(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
-			  console.log("== Users ==");
-			  console.log(_.map(users, 'id'));
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 			  populateRedisWithTweets(requestToken, _.rest(data));
 			  var subsetUsers = getSubsetUsers(randomTweet.user.id, users); 
-			  console.log("== Subset ==");
-			  console.log(_.map(subsetUsers, 'id'));
 			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
   		});
