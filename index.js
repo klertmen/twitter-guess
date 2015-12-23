@@ -85,6 +85,7 @@ function setTwitterUserName(request) {
       //you could e.g. display his screen_name
       request.session.userName = data.name;
     }
+  }
 }
 
 app.get('/game', function(request, response) {
