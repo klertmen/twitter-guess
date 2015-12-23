@@ -97,8 +97,12 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	      var randomTweet = _.first(data);
 	      var users = _.uniq(_.map(data, 'user'), "id");
 	      session.users = users;
-	      session.questionCount = 1;
-	      session.numberCorrect = 0;
+	      if (!session.questionCount) {
+	        session.questionCount = 1;
+	      }
+	      if (!session.numberCorrect) {
+	      	session.numberCorrect = 0;
+	      }
 	      redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
 	      populateRedisWithTweets(requestToken, _.rest(data));
 	      var subsetUsers = getSubsetUsers(randomTweet.user.id, users);
