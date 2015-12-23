@@ -41,7 +41,7 @@ function populateRedisWithTweets(requestToken, tweets) {
   });
 }
 
-function renderPage(users, response) {
+function renderPage(requestToken, users, response) {
   return function(err, data) {
     // TODO: handle case where no more tweets
     if(!data) {
@@ -58,7 +58,7 @@ function renderPage(users, response) {
 }
 
 function getNextTweetFromRedis(requestToken, callbackFn, usersList, response) {
-  redisClient.lpop(requestToken+'tweets', callbackFn(usersList, response));
+  redisClient.lpop(requestToken+'tweets', callbackFn(requestToken, usersList, response));
 }
 
 function getSubsetUsers(userId, users) {
