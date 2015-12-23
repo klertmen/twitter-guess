@@ -102,7 +102,7 @@ app.get('/game', function(request, response) {
 	if (error) {
 	 console.log(error);
 	} else {
-	 setTwitterUserName(request);
+	 setTwitterUserName(request, accessToken, accessTokenSecret);
 	 twitter.getTimeline('home', { count : 10 }, accessToken, accessTokenSecret,
 	    function(error, data, twitterResp) {
 	    if (error) {
