@@ -50,7 +50,7 @@ function renderPage(users, response) {
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
-  //redisClient.lrange(requestToken+'tweets', 0, 0, callbackFn(usersList, response));
+  redisClient.lrange(requestToken+'tweets', 0, 0, callbackFn(usersList, response));
 }
 
 app.get('/testEJS', function(request, response) {
