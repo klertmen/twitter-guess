@@ -43,14 +43,15 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(users, response) {
   return function(err, data) {
-    console.log(data);
-    var tweet = { text: 'New tweet', userId: '123456' }
-    return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
-  }
+    return redisClient.hgetall(data, function(err, obj) {
+	console.log(obj);
+    	var tweet = { text: 'New tweet', userId: '123456' }
+    	return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
+    }
 }
 
 function getTweetFromRedis(requestToken, callbackFn, usersList, response) {
-  redisClient.lrange(requestToken+'tweets', 0, 0, callbackFn(usersList, response));
+  redisClient.lpop(requestToken+'tweets', callbackFn(usersList, response));
 }
 
 app.get('/testEJS', function(request, response) {
@@ -98,11 +99,11 @@ app.get('/game', function(request, response) {
 	  		if (error) { 
 			  console.log(error); 
 			} else { 
-			  var randomTweet = _.sample(data);
+			  var randomTweet = _.first(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
 			  request.session.users = users;
 			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
-			  populateRedisWithTweets(requestToken, data);
+			  populateRedisWithTweets(requestToken, _.rest(data));
 			  var subsetUsers = getSubsetUsers(randomTweet.user.id, users); 
 			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
