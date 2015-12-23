@@ -41,7 +41,7 @@ function renderPage(requestToken, session, response) {
   return function(err, tweetId) {
     // TODO: handle case where no more tweets
     if(!tweetId) {
-	getTweetsFromTimeline(session, requestToken, response);
+	return getTweetsFromTimeline(session, requestToken, response);
     }
     return redisClient.hgetall(tweetId, function(err, tweet) {
    	redisClient.set(tweetId+'answer', tweet.userId);
@@ -89,7 +89,7 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
 }
 
 function getTweetsFromTimeline(session, requestToken, response) {
-  twitter.getTimeline('home', { count : 10 }, session.accessToken, session.accessTokenSecret,
+  return twitter.getTimeline('home', { count : 10 }, session.accessToken, session.accessTokenSecret,
     function(error, data, twitterResp) {
 	    if (error) {
 	      console.log(error);
