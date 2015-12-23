@@ -83,7 +83,7 @@ function getSubsetUsers(userId, users) {
 	  subsetUsers.push(user);
 	} else {
 	  while (subsetUsers.length != 6) {
-	   var newUser = _.sample(users, 1);
+	   var newUser = _.sample(users);
 	   console.log(newUser.id);
 	   subsetUsers.push(newUser);
 	  }
