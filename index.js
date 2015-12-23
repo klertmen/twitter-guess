@@ -77,18 +77,16 @@ app.get('/testEJS', function(request, response) {
 
 function getSubsetUsers(userId, users) {
 	var subsetUsers = _.sample(users, 5);
-	console.log(_.map(subsetUsers, 'id'));
 	userId = Number(userId);
-	console.log(userId);
 	if (!_.find(subsetUsers, 'id', userId)) {
-		var user = _.find(users, 'id', userId);
-		subsetUsers.push(user);
+	  var user = _.find(users, 'id', userId);
+	  subsetUsers.push(user);
 	} else {
-		console.log("adding one more")
-		while (subsetUsers.length != 6) {
-			subsetUsers.push(_.sample(users, 1));
-			console.log(subsetUsers.length);
-		}
+	  while (subsetUsers.length != 6) {
+	   var newUser = _.sample(users, 1);
+	   console.log(newUser.id);
+	   subsetUsers.push(newUser);
+	  }
 	}
 	console.log("*" + _.map(subsetUsers, 'id'));
 	//subsetUsers = _.shuffle(subsetUsers);
