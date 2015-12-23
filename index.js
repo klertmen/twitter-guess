@@ -93,7 +93,7 @@ app.get('/game', function(request, response) {
 	  if (error) {
 		console.log(error);
 	  } else {
-		twitter.getTimeline('home', { count : 3 }, accessToken, accessTokenSecret,
+		twitter.getTimeline('home', { count : 10 }, accessToken, accessTokenSecret,
 		    function(error, data, twitterResp) {
 	  		if (error) { 
 			  console.log(error); 
@@ -101,8 +101,8 @@ app.get('/game', function(request, response) {
 			  var randomTweet = _.sample(data);
 			  var users = _.uniq(_.map(data, 'user'), "id");
 			  request.session.users = users;
-			  redisClient.set(randomTweet.id, randomTweet.user.id);
-			  //populateRedisWithTweets(requestToken, data);
+			  redisClient.set(randomTweet.id+'answer', randomTweet.user.id);
+			  populateRedisWithTweets(requestToken, data);
 			  var subsetUsers = getSubsetUsers(randomTweet.user.id, users); 
 			  response.render('pages/twitter', { users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id });
 			}
@@ -114,7 +114,7 @@ app.get('/game', function(request, response) {
 app.get('/checkAnswer', function(request, response) {
    var tweetId = request.query.tweetid;
    var choice = request.query.userid;
-   redisClient.get(tweetId, function(err, reply) {
+   redisClient.get(tweetId+'answer', function(err, reply) {
       if (reply) {
         var tweetAuthor = reply.toString();
         if (choice === tweetAuthor) {
