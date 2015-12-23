@@ -43,7 +43,8 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(users, response) {
   return function(err, data) {
-    var tweet = redisClient.hgetAll(data);
+    console.log(data);
+    var tweet = { text: 'New tweet', userId: '123456' }
     return response.render('pages/twitter', { users: users, tweet: tweet.text, tweetId: tweet.userId });
   }
 }
@@ -92,7 +93,7 @@ app.get('/game', function(request, response) {
 	  if (error) {
 		console.log(error);
 	  } else {
-		twitter.getTimeline('home', { count : 200 }, accessToken, accessTokenSecret,
+		twitter.getTimeline('home', { count : 3 }, accessToken, accessTokenSecret,
 		    function(error, data, twitterResp) {
 	  		if (error) { 
 			  console.log(error); 
