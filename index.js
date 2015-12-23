@@ -44,7 +44,7 @@ function populateRedisWithTweets(requestToken, tweets) {
 function renderPage(users, response) {
   return function(err, data) {
     return redisClient.hgetall(data, function(err, tweet) {
-   	redisClient.set(tweetId+'answer', tweet.userId);
+   	redisClient.set(tweet.userId+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, users);
 	console.log("right answer: " + tweet.userId);
 	console.log(_.map(subsetUsers, 'id'));
