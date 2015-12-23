@@ -33,6 +33,12 @@ function populateRedisWithTweets(requestToken, tweets) {
   tweetsArr.push(_.map(tweets, "id"));
   redisClient.rpush(_.flatten(tweetsArr));
   // add hashes for each tweet
+  _.map(tweets, function(tweet) { 
+    client.hmset(tweet.id, {
+      text: tweet.text,
+      userId: tweet.user.id
+    });
+  });
 }
 
 function renderPage(users, response) {
