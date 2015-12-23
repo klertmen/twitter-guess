@@ -37,11 +37,11 @@ function populateRedisWithTweets(requestToken, tweets) {
   });
 }
 
-function renderPage(session, response) {
+function renderPage(requestToken, session, response) {
   return function(err, tweetId) {
     // TODO: handle case where no more tweets
     if(!tweetId) {
-      response.send("Thanks for playing, " + session.userName + " !");
+	getTweetsFromTimeline(session, requestToken, response);
     }
     return redisClient.hgetall(tweetId, function(err, tweet) {
    	redisClient.set(tweetId+'answer', tweet.userId);
@@ -53,7 +53,7 @@ function renderPage(session, response) {
 }
 
 function getNextTweetFromRedis(requestToken, session, response) {
-  redisClient.lpop(requestToken+'tweets', renderPage(session, response));
+  redisClient.lpop(requestToken+'tweets', renderPage(requestToken, session, response));
 }
 
 function getSubsetUsers(userId, users) {
