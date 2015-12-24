@@ -153,6 +153,7 @@ app.get('/checkAnswer', function(request, response) {
         } else {
           response.json({ answer: "incorrect", userid: tweetAuthor });
         }
+   	redisClient.del(tweetId+'answer');
       } else {
         response.send({ answer: "not found" });
       }
