@@ -34,6 +34,8 @@ function populateRedisWithTweets(requestToken, tweets) {
       text: tweet.text,
       userId: tweet.user.id
     });
+    // set TTL for each tweet to 1 day (86400 seconds)
+    redisClient.expire(tweet.id, 86400);
   });
 }
 
