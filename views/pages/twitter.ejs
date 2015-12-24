@@ -20,6 +20,9 @@
 	<% } else { %>
 	    </h2>
 	<% } %>
+	<% if (userName) {%> 
+	<span class="label label-primary"><%= userName %></span>
+	<% } %>
     	<h1 id="<%= tweetId %>"><%= tweet %></h1>
     </div>
     

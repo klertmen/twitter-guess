@@ -48,7 +48,12 @@ function renderPage(requestToken, session, response) {
    	redisClient.set(tweetId+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, session.users);
 	var percentCorrect = ((session.numberCorrect / (session.questionCount - 1)) * 100).toFixed();
-    	return response.render('pages/twitter', { currentQuestionNumber: session.questionCount, users: subsetUsers, tweet: tweet.text, tweetId: tweetId, percentCorrect: percentCorrect });
+    	return response.render('pages/twitter', 
+		{ currentQuestionNumber: session.questionCount, 
+		  users: subsetUsers, tweet: tweet.text, 
+		  tweetId: tweetId, percentCorrect: percentCorrect,
+		  userName: session.userName 
+		 });
     });
   }
 }
@@ -81,9 +86,6 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
     if (error) {
        console.log(error);
     } else {
-      //accessToken and accessTokenSecret can now be used to make api-calls (not yet implemented)
-      //data contains the user-data described in the official Twitter-API-docs
-      //you could e.g. display his screen_name
       request.session.userName = data.name;
     }
   });
@@ -113,7 +115,8 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	      response.render('pages/twitter',
 		    { currentQuestionNumber: session.questionCount,
 		      users: subsetUsers, tweet: randomTweet.text, tweetId: randomTweet.id,
-		      percentCorrect: percentCorrect 
+		      percentCorrect: percentCorrect,
+		      userName: session.userName 
 		    });
 	    }
     });
