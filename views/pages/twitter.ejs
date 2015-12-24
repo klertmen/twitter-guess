@@ -14,14 +14,14 @@
   </head>
   <body>
     <div class="jumbotron text-center">
+	<% if (userName) {%> 
+	<h3><span class="label label-primary"><%= userName %></span></h3>
+	<% } %>
     	<h2>Tweet #<%= currentQuestionNumber %>
 	<% if (currentQuestionNumber > 1) {%> 
 	   (<%= percentCorrect %>% correct) </h2>
 	<% } else { %>
 	    </h2>
-	<% } %>
-	<% if (userName) {%> 
-	<span class="label label-primary"><%= userName %></span>
 	<% } %>
     	<h1 id="<%= tweetId %>"><%= tweet %></h1>
     </div>
