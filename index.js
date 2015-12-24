@@ -44,6 +44,7 @@ function renderPage(requestToken, session, response) {
 	return getTweetsFromTimeline(session, requestToken, response);
     }
     return redisClient.hgetall(tweetId, function(err, tweet) {
+	redisClient.del(tweetId);
    	redisClient.set(tweetId+'answer', tweet.userId);
 	var subsetUsers = getSubsetUsers(tweet.userId, session.users);
 	var percentCorrect = ((session.numberCorrect / (session.questionCount - 1)) * 100).toFixed();
