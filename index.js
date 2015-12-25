@@ -140,8 +140,9 @@ app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
-  //if (!session.accessTokenSecret) {
-  //}
+  if (!session.accessTokenSecret) {
+    return getRequestTokenAndRedirect(request, response);
+  }
   if (!oauth_verifier) {
     request.session.questionCount = request.session.questionCount+1;
     getNextTweetFromRedis(requestToken, request.session, response);
