@@ -94,7 +94,6 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
 }
 
 function getTweetsFromTimeline(session, requestToken, response) {
-  console.log('accessToken: ' + session.accessToken + ' accessTokenSecret: ' + session.accessTokenSecret);
   return twitter.getTimeline('home', { count : 200 }, session.accessToken, session.accessTokenSecret,
     function(error, data, twitterResp) {
 	    if (error) {
@@ -125,10 +124,24 @@ function getTweetsFromTimeline(session, requestToken, response) {
     });
 }
 
+function getRequestTokenAndRedirect(request, response) {
+  return twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
+	if (error) {
+		console.log(error);
+	} else {
+		request.session.token = requestToken;
+		request.session.tokenSecret = requestTokenSecret;
+		response.redirect(twitter.getAuthUrl(requestToken));
+	}
+  });
+});
+
 app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
+  //if (!session.accessTokenSecret) {
+  //}
   if (!oauth_verifier) {
     request.session.questionCount = request.session.questionCount+1;
     getNextTweetFromRedis(requestToken, request.session, response);
@@ -167,15 +180,7 @@ app.get('/checkAnswer', function(request, response) {
 });
 
 app.get('/', function(request, response) {
-  twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
-	if (error) {
-		console.log(error);
-	} else {
-		request.session.token = requestToken;
-		request.session.tokenSecret = requestTokenSecret;
-		response.redirect(twitter.getAuthUrl(requestToken));
-	}
-  });
+  return getRequestTokenAndRedirect(request, response);  
 });
 
 app.listen(app.get('port'), function() {
