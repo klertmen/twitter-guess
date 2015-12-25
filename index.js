@@ -94,6 +94,7 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
 }
 
 function getTweetsFromTimeline(session, requestToken, response) {
+  console.log('accessToken: ' + session.accessToken + ' accessTokenSecret: ' + session.accessTokenSecret);
   return twitter.getTimeline('home', { count : 200 }, session.accessToken, session.accessTokenSecret,
     function(error, data, twitterResp) {
 	    if (error) {
