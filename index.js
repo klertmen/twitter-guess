@@ -140,7 +140,7 @@ app.get('/game', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
   var oauth_verifier = request.query.oauth_verifier;
-  if (!request.session.accessTokenSecret) {
+  if (!request.session.token) {
     return getRequestTokenAndRedirect(request, response);
   }
   if (!oauth_verifier) {
