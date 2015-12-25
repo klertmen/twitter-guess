@@ -134,7 +134,7 @@ function getRequestTokenAndRedirect(request, response) {
 		response.redirect(twitter.getAuthUrl(requestToken));
 	}
   });
-});
+}
 
 app.get('/game', function(request, response) {
   var requestToken = request.session.token;
