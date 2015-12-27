@@ -58,7 +58,6 @@
 	  var buttonId = $(this).attr("id");
 	  $.get("/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + buttonId)
 	   	.done(function(resp) {
-		   $("button").attr("disabled", "disabled");
 		   if (resp.answer && resp.answer === 'correct') {
 	     	     $("#correct").show();
 	     	     $("#" + buttonId).addClass("btn-success");
@@ -68,6 +67,7 @@
 	     	     $("#" + buttonId).addClass("btn-danger");
 	     	     $("#" + resp.userid).addClass("btn-success");
 		   }
+		   $("button").attr("disabled", "disabled");
 		   setTimeout(function() { window.location.href = '/game'; }, 1000); 
 	        });
 	}); 
