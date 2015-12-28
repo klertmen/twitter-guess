@@ -169,8 +169,14 @@ app.get('/checkAnswer', function(request, response) {
         var tweetAuthor = reply.toString();
         if (choice === tweetAuthor) {
 	  request.session.numberCorrect = request.session.numberCorrect+1;
-          response.json({ answer: "correct"});
+ 	  if (request.session.winStreak) {
+	    request.session.winStreak = request.session.winStreak+1;
+          } else {
+	    request.session.winStreak = 0;	  
+	  }
+          response.json({ answer: "correct", winStreak: request.session.winStreak });
         } else {
+	  request.session.winStreak = 0;
           response.json({ answer: "incorrect", userid: tweetAuthor });
         }
    	redisClient.del(tweetId+'answer');
