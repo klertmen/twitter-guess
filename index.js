@@ -106,6 +106,9 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	      if (!session.questionCount) {
 	        session.questionCount = 1;
 	      }
+	      if (!session.winStreak) {
+	        session.winStreak = 0;
+	      }
 	      if (!session.numberCorrect) {
 	      	session.numberCorrect = 0;
 	      } else {
@@ -172,7 +175,7 @@ app.get('/checkAnswer', function(request, response) {
  	  if (request.session.winStreak) {
 	    request.session.winStreak = request.session.winStreak+1;
           } else {
-	    request.session.winStreak = 0;	  
+	    request.session.winStreak = 1;	  
 	  }
           response.json({ answer: "correct", winStreak: request.session.winStreak });
         } else {
