@@ -59,7 +59,7 @@
 	  $.get("/checkAnswer?tweetid=" + $("h1").attr("id") + "&userid=" + buttonId)
 	   	.done(function(resp) {
 		   if (resp.answer && resp.answer === 'correct') {
-	     	     $("#correct").text("Great job!  " + $("#"+resp.winStreak).text() + " in a row!");
+	     	     $("#correct").text("Great job!  " + resp.winStreak + " in a row!");
 	     	     $("#correct").show();
 	     	     $("#" + buttonId).addClass("btn-success");
 		   } else if (resp.answer && resp.answer === 'incorrect') {
