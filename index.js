@@ -33,7 +33,7 @@ function populateRedisWithTweets(requestToken, tweets) {
   _.map(tweets, function(tweet) {
     if (tweet.text.startsWith('RT @')) {
       // skip retweets for now
-      continue;
+      return;
     }
     redisClient.hmset(tweet.id, {
       text: tweet.text,
