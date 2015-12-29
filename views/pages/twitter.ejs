@@ -61,10 +61,12 @@
 		     }
 	     	     $("#status").text(elemText);
 	     	     $("#status").addClass("text-center");
+	     	     $("#status").addClass("text-success");
 	     	     $("#" + buttonId).addClass("btn-success");
 		   } else if (resp.answer && resp.answer === 'incorrect') {
 	     	     $("#status").text("Nope, " + $("#"+resp.userid).text() + " tweeted this.");
 	     	     $("#status").addClass("text-center");
+	     	     $("#status").addClass("text-danger");
 	     	     $("#" + buttonId).addClass("btn-danger");
 	     	     $("#" + resp.userid).addClass("btn-success");
 		   }
