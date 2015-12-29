@@ -16,6 +16,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(cookieParser());
 app.use(session({secret: '918209381230lajksdf',
 		 saveUninitialized: true,
+		 cookie: { maxAge: 31536000000 }, // session expires in one year 
 		 resave: true}));
 
 app.use(express.static(__dirname + '/public'));
