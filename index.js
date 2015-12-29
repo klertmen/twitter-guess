@@ -31,6 +31,10 @@ function populateRedisWithTweets(requestToken, tweets) {
   redisClient.rpush(_.flatten(tweetsArr));
   // add hashes for each tweet
   _.map(tweets, function(tweet) {
+    if (tweet.text.startsWith('RT @')) {
+      // skip retweets for now
+      continue;
+    }
     redisClient.hmset(tweet.id, {
       text: tweet.text,
       userId: tweet.user.id
@@ -42,7 +46,7 @@ function populateRedisWithTweets(requestToken, tweets) {
 
 function renderPage(requestToken, session, response) {
   return function(err, tweetId) {
-    // TODO: handle case where no more tweets
+    // handle case where no more tweets
     if(!tweetId) {
 	return getTweetsFromTimeline(session, requestToken, response);
     }
@@ -90,6 +94,8 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
        console.log(error);
     } else {
       request.session.userName = data.name;
+      // TODO: store list of user sessions
+      redisClient.set(request.session.userName+'+user', new Date().toUTCString());
     }
   });
 }
@@ -106,7 +112,6 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	      var percentCorrect = 0;
 	      session.users = users;
 	      if (!session.questionCount) {
-	        redisClient.set(session.userName+'+user', new Date().toUTCString());
 	        session.questionCount = 1;
 	      }
 	      if (!session.winStreak) {
