@@ -105,6 +105,7 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	      var percentCorrect = 0;
 	      session.users = users;
 	      if (!session.questionCount) {
+	        redisClient.set(session.userName+'+user', new Date().toUTCString());
 	        session.questionCount = 1;
 	      }
 	      if (!session.winStreak) {
