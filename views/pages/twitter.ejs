@@ -17,7 +17,7 @@
   <body>
     <div class="jumbotron">
 	<% if (userName) {%> 
-	<h3><span class="pull-right label label-primary">Hey, <%= userName %>!</span></h3>
+	<h4><div class="label label-primary">Playing as: <%= userName %></div></h4>
 	<% } %>
     	<h2>Tweet #<%= currentQuestionNumber %>
 	<% if (currentQuestionNumber > 1) {%> 
