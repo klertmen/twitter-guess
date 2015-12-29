@@ -99,6 +99,7 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	    if (error) {
 	      console.log(error);
 	    } else {
+	      data = _.shuffle(data);
 	      var randomTweet = _.first(data);
 	      var users = _.uniq(_.map(data, 'user'), "id");
 	      var percentCorrect = 0;
