@@ -31,10 +31,6 @@ function populateRedisWithTweets(requestToken, tweets) {
   redisClient.rpush(_.flatten(tweetsArr));
   // add hashes for each tweet
   _.map(tweets, function(tweet) {
-    if (tweet.text.match('^RT @')) {
-      // skip retweets for now
-      return;
-    }
     redisClient.hmset(tweet.id, {
       text: tweet.text,
       userId: tweet.user.id
@@ -106,7 +102,8 @@ function getTweetsFromTimeline(session, requestToken, response) {
 	    if (error) {
 	      console.log(error);
 	    } else {
-	      data = _.shuffle(data);
+ 	      // TODO: filter out RTs
+	      data = _.shuffle(_.filter(data, function(tweet) { return !tweet.text.match('^RT @'); }));
 	      var randomTweet = _.first(data);
 	      var users = _.uniq(_.map(data, 'user'), "id");
 	      var percentCorrect = 0;
