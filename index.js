@@ -31,7 +31,7 @@ function populateRedisWithTweets(requestToken, tweets) {
   redisClient.rpush(_.flatten(tweetsArr));
   // add hashes for each tweet
   _.map(tweets, function(tweet) {
-    if (tweet.text.startsWith('RT @')) {
+    if (tweet.text.match('^RT @')) {
       // skip retweets for now
       return;
     }
@@ -154,6 +154,7 @@ app.get('/game', function(request, response) {
   if (!request.session.token) {
     return getRequestTokenAndRedirect(request, response);
   }
+  // after first question, won't get an oauth_verifier
   if (!oauth_verifier) {
     request.session.questionCount = request.session.questionCount+1;
     getNextTweetFromRedis(requestToken, request.session, response);
@@ -198,7 +199,15 @@ app.get('/checkAnswer', function(request, response) {
 });
 
 app.get('/', function(request, response) {
-  return getRequestTokenAndRedirect(request, response);  
+  var requestToken = request.session.token;
+  var requestTokenSecret = request.session.tokenSecret;
+  if (!request.session.token) {
+    return getRequestTokenAndRedirect(request, response);
+  } else {
+    request.session.questionCount = request.session.questionCount+1;
+    getNextTweetFromRedis(requestToken, request.session, response);
+    return;
+  }
 });
 
 app.listen(app.get('port'), function() {
