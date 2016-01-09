@@ -21,11 +21,10 @@
 	<% } %>
     	<h2>Tweet #<%= currentQuestionNumber %>
 	<% if (currentQuestionNumber > 1) {%> 
-	   (<%= percentCorrect %>% correct) </h2>
-	<% } else { %>
-	    </h2>
+	   (<%= percentCorrect %>% correct) 
 	<% } %>
-	<input type="button" value="Reset game" id="reset">
+	<input type="button" class="btn btn-default" value="Restart game" id="reset">
+	</h2>
     	<h1 id="<%= tweetId %>"><%= tweet %></h1>
     </div>
     <h3 class="col-md-12 pull-left" style="margin-top: 0px" id="status">Who tweeted it?</h3>
