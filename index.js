@@ -66,22 +66,22 @@ function getNextTweetFromRedis(requestToken, session, response) {
 }
 
 function getSubsetUsers(userId, users) {
-	var subsetUsers = _.sample(users, 5);
-	userId = Number(userId);
- 	// add correct user to list if it's not part of sample
-	if (!_.find(subsetUsers, 'id', userId)) {
-	  subsetUsers.push(_.find(users, 'id', userId));
-	} else {
-	  // if correct user is in sample, add unique users
-	  while (subsetUsers.length != 6) {
-	    var newUser = _.sample(users);
-	    if (!_.find(subsetUsers, 'id', newUser.id)) {
-	      subsetUsers.push(newUser);
-	    }
-	  }
-	}
-	subsetUsers = _.shuffle(subsetUsers);
-	return subsetUsers;
+  var subsetUsers = _.sample(users, 5);
+  userId = Number(userId);
+  // add correct user to list if it's not part of sample
+  if (!_.find(subsetUsers, 'id', userId)) {
+    subsetUsers.push(_.find(users, 'id', userId));
+  } else {
+    // if correct user is in sample, add unique users
+    while (subsetUsers.length != 6) {
+      var newUser = _.sample(users);
+      if (!_.find(subsetUsers, 'id', newUser.id)) {
+        subsetUsers.push(newUser);
+      }
+    }
+  }
+  subsetUsers = _.shuffle(subsetUsers);
+  return subsetUsers;
 }
 
 function setTwitterUserName(request, accessToken, accessTokenSecret) {
