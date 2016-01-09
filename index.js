@@ -1,5 +1,5 @@
 var express = require('express');
-var _ = require('lodash');
+ear _ = require('lodash');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var app = express();
@@ -91,7 +91,7 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
     } else {
       request.session.userName = data.name;
       // TODO: store list of user sessions
-      redisClient.set(request.session.userName+'+user+'+new Date().toUTCString(), accessToken);
+      redisClient.set(data.screen_name+'+user+'+new Date().toUTCString(), accessToken);
     }
   });
 }
