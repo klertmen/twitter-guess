@@ -196,7 +196,9 @@ app.get('/checkAnswer', function(request, response) {
 });
 
 app.get('/resetScores', function(request, response) {
-  console.log('resetting scores');
+  request.session.questionCount = 1;
+  request.session.numberCorrect = 0;
+  return;
 });
 
 app.get('/', function(request, response) {
