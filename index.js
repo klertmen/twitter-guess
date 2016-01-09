@@ -195,6 +195,10 @@ app.get('/checkAnswer', function(request, response) {
    });
 });
 
+app.get('/resetScores', function(request, response) {
+  console.log('resetting scores');
+});
+
 app.get('/', function(request, response) {
   var requestToken = request.session.token;
   var requestTokenSecret = request.session.tokenSecret;
