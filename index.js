@@ -1,5 +1,5 @@
 var express = require('express');
-ear _ = require('lodash');
+var _ = require('lodash');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var app = express();
