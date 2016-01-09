@@ -153,7 +153,14 @@ app.get('/game', function(request, response) {
   }
   // after first question, won't get an oauth_verifier
   if (!oauth_verifier) {
-    request.session.questionCount = request.session.questionCount+1;
+    if (!request.session.numberCorrect) { 
+      request.session.numberCorrect = 0;
+    } 
+    if (!request.session.questionCount) { 
+      request.session.questionCount = 1;
+    } else {
+      request.session.questionCount = request.session.questionCount+1;
+    }
     getNextTweetFromRedis(requestToken, request.session, response);
     return;
   }
