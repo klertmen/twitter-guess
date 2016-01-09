@@ -52,7 +52,7 @@
       $(document).ready(function(){
 	$("#reset").click(function(e) {
 	  e.preventDefault();
-	  $.get("/resetScores");
+	  $.get("/resetScores").done(function(resp) { window.location.href = '/game'; });
 	}); 
 	$("button").click(function(e) {
 	  e.preventDefault();
