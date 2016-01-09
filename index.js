@@ -198,7 +198,7 @@ app.get('/checkAnswer', function(request, response) {
 app.get('/resetScores', function(request, response) {
   request.session.questionCount = 1;
   request.session.numberCorrect = 0;
-  return;
+  response.redirect('/game');
 });
 
 app.get('/', function(request, response) {
