@@ -91,7 +91,7 @@ function setTwitterUserName(request, accessToken, accessTokenSecret) {
     } else {
       request.session.userName = data.name;
       // TODO: store list of user sessions
-      redisClient.set(request.session.userName+'+user', new Date().toUTCString());
+      redisClient.set(request.session.userName+'+user+'+new Date().toUTCString(), accessToken);
     }
   });
 }
